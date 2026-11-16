@@ -1,0 +1,39 @@
+# ============================================================================
+#  vis.mac  —  interactive visualization defaults
+# ----------------------------------------------------------------------------
+#  Loaded automatically in interactive mode (main.cc). Opens a viewer, draws
+#  the default PE/Pb/Al stack, and applies the Am-Be source so you can fire a
+#  few events and watch tracks. This mirrors proposal Figure 5.
+# ============================================================================
+
+/run/initialize
+
+# ---- viewer ----------------------------------------------------------------
+/vis/open OGL 800x600-0+0
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+# Camera.
+/vis/viewer/set/viewpointThetaPhi 80 10
+/vis/viewer/zoom 1.4
+
+# Draw the geometry.
+/vis/drawVolume
+
+# ---- trajectories ----------------------------------------------------------
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set gamma   green
+/vis/modeling/trajectories/drawByParticleID-0/set neutron yellow
+/vis/modeling/trajectories/drawByParticleID-0/set e-      red
+/vis/scene/endOfEventAction accumulate 50
+
+# ---- source ----------------------------------------------------------------
+/control/execute source_ambe.mac
+
+# Re-enable refresh.
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+# Fire a handful of events for visualization (NOT for data — too few).
+# /run/beamOn 20

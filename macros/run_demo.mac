@@ -1,0 +1,30 @@
+# ============================================================================
+#  run_demo.mac  —  one self-contained batch run (the contract, by hand)
+# ----------------------------------------------------------------------------
+#  Demonstrates exactly what the Python orchestrator generates per config:
+#    seed → clear → addLayer × N → build → source → output filename → beamOn.
+#  Run with:  ./graded-z run_demo.mac
+# ============================================================================
+
+/run/initialize
+
+# Reproducible seed for THIS run.
+/random/setSeeds 12345 67890
+
+# --- geometry: a PE / Pb / Al graded-Z stack -------------------------------
+/shield/clearLayers
+/shield/addLayer G4_POLYETHYLENE 30 mm
+/shield/addLayer G4_Pb           10 mm
+/shield/addLayer G4_Al           10 mm
+/shield/setSourceDistance 30 cm
+/shield/build
+
+# --- source ----------------------------------------------------------------
+/control/execute source_ambe.mac
+
+# --- output file for THIS run (orchestrator overrides per config) ----------
+/analysis/setFileName demo_output
+
+# --- run -------------------------------------------------------------------
+/run/printProgress 200
+/run/beamOn 1000

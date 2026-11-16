@@ -1,0 +1,66 @@
+# ============================================================================
+#  source_ambe.mac  —  Mock Am-Be mixed-radiation source via GPS
+# ----------------------------------------------------------------------------
+#  An Am-Be source emits BOTH:
+#    - fast neutrons : continuous ~0-11 MeV, broad peak near 4-5 MeV
+#    - gammas        : a 4.4 MeV line (C-12 de-excitation), ~0.6 per neutron
+#
+#  GPS supports multiple sources combined by relative INTENSITY. We define:
+#    source #1 : neutrons with a coarse histogram approximation of the spectrum
+#    source #2 : 4.4 MeV gammas
+#
+#  This is the "mock" placeholder (Open Questions: Mock Am-Be spectrum). When
+#  real spectral data arrives, only THIS FILE changes — no recompile.
+#
+#  The histogram below is a coarse, illustrative approximation of an Am-Be
+#  neutron spectrum (ISO 8529-style shape). Replace bin values with a measured
+#  or evaluated spectrum for production runs.
+# ============================================================================
+
+# ---- common geometry of the beam: a pencil/disk beam along +z --------------
+# Position is set per-run relative to the source distance; here we place the
+# source on the -z side firing toward +z. The orchestrator can override.
+/gps/verbose 0
+
+# ============================ SOURCE 1: NEUTRONS ============================
+/gps/source/intensity 1.0
+/gps/particle neutron
+
+# Beam geometry: a 2 cm-radius disk beam, on the -z axis, pointing +z.
+/gps/pos/type Beam
+/gps/pos/centre 0 0 -30 cm
+/gps/pos/sigma_r 1.0 cm
+/gps/direction 0 0 1
+
+# Energy: user-defined histogram (arbitrary-unit differential spectrum).
+# Bins are lower-edge energies in MeV; values are relative weights.
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/hist/point 0.5  0.20
+/gps/hist/point 1.0  0.45
+/gps/hist/point 2.0  0.75
+/gps/hist/point 3.0  1.00
+/gps/hist/point 4.0  1.00
+/gps/hist/point 5.0  0.85
+/gps/hist/point 6.0  0.60
+/gps/hist/point 7.0  0.45
+/gps/hist/point 8.0  0.30
+/gps/hist/point 9.0  0.18
+/gps/hist/point 10.0 0.08
+/gps/hist/point 11.0 0.02
+/gps/hist/inter Lin
+
+# ============================ SOURCE 2: 4.4 MeV GAMMA =======================
+# Add a second source. Relative intensity ~0.6 (Am-Be emits ~0.6 of the 4.4 MeV
+# gamma per neutron).
+/gps/source/add 0.6
+/gps/particle gamma
+/gps/pos/type Beam
+/gps/pos/centre 0 0 -30 cm
+/gps/pos/sigma_r 1.0 cm
+/gps/direction 0 0 1
+/gps/ene/type Mono
+/gps/ene/mono 4.4 MeV
+
+# Re-select source 1 as current so subsequent edits don't accidentally hit #2.
+/gps/source/list

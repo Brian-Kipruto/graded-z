@@ -1,0 +1,8 @@
+build/
+data/runs/
+data/master.parquet
+data/failed_runs.json
+__pycache__/
+*.pyc
+.venv/
+*.csv
