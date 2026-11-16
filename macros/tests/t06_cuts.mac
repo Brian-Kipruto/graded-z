@@ -1,0 +1,21 @@
+# ============================================================================
+#  t06_cuts.mac  —  Pass 00 anchor macro (M11; amendment A1)
+# ----------------------------------------------------------------------------
+#  Prints the production thresholds (range cut -> energy) for every
+#  material-cuts couple at the dummy's 0.7 mm global cut.
+#  /run/dumpCouples only shows real values "after BeamOn has started"
+#  (G4RunMessenger.cc, v11.2.1), so we do a zero-event run first:
+#  /run/beamOn 0 builds the tables but skips the user run action (no CSV).
+#  Run from build/:  ./graded-z ../macros/tests/t06_cuts.mac
+# ============================================================================
+
+/run/initialize
+
+/shield/clearLayers
+/shield/addLayer G4_POLYETHYLENE 30 mm
+/shield/addLayer G4_Pb           10 mm
+/shield/addLayer G4_Al           10 mm
+/shield/build
+
+/run/beamOn 0
+/run/dumpCouples

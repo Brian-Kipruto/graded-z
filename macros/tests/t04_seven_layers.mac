@@ -1,0 +1,37 @@
+# ============================================================================
+#  t04_seven_layers.mac  —  Pass 00 anchor macro (M5; amendment A3)
+# ----------------------------------------------------------------------------
+#  Seven layers where the CSV has room for six (kMaxLayers = 6, no check).
+#    layer 0     : 10 mm Pb      -> Edep MUST be > 0 (proves MFD read-out
+#                                    still works after the rebuild: rules
+#                                    out D-07 as the cause of lost energy)
+#    layers 1-5  : 1 um Galactic
+#    layer 6     : 10 mm Pb      -> its Edep has no column (D-05)
+#  Predictions: exit 0, end-of-run line says 7 layers, CSV has 6 layer cols.
+#  Run from build/:  ./graded-z ../macros/tests/t04_seven_layers.mac
+# ============================================================================
+
+/run/initialize
+/random/setSeeds 1004 2004
+
+/shield/clearLayers
+/shield/addLayer G4_Pb       10 mm
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/addLayer G4_Pb       10 mm
+/shield/setSourceDistance 30 cm
+/shield/build
+
+/gps/particle gamma
+/gps/pos/type Point
+/gps/pos/centre 0 0 -30 cm
+/gps/direction 0 0 1
+/gps/ene/type Mono
+/gps/ene/mono 4.4 MeV
+
+/analysis/setFileName t04_seven_layers
+/run/printProgress 500
+/run/beamOn 1000

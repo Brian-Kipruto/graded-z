@@ -1,0 +1,31 @@
+# ============================================================================
+#  t01_gamma_empty.mac  —  Pass 00 anchor macro (M2, M3, M6)
+# ----------------------------------------------------------------------------
+#  4.4 MeV gamma pencil beam through an "empty" stack: one 1 um G4_Galactic
+#  layer (Pass 00 decision 4; true zero layers arrive in Pass 01).
+#  Every gamma reaching the back face is an unscattered or scattered PRIMARY.
+#  Exposes D-01: dummy books primary gammas as n_secondary_photons.
+#  Run from build/:  ./graded-z ../macros/tests/t01_gamma_empty.mac
+# ============================================================================
+
+/run/initialize
+/random/setSeeds 1001 2001
+
+# --- geometry: effectively empty stack -------------------------------------
+/shield/clearLayers
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/setSourceDistance 30 cm
+/shield/build
+
+# --- source: gamma-only pencil beam on axis, firing +z ---------------------
+/gps/particle gamma
+/gps/pos/type Point
+/gps/pos/centre 0 0 -30 cm
+/gps/direction 0 0 1
+/gps/ene/type Mono
+/gps/ene/mono 4.4 MeV
+
+# --- output + run ----------------------------------------------------------
+/analysis/setFileName t01_gamma_empty
+/run/printProgress 2000
+/run/beamOn 10000

@@ -6,3 +6,10 @@ __pycache__/
 *.pyc
 .venv/
 *.csv
+
+# Handoffs live in the vault only (L-02)
+docs/HANDOFFS/
+
+# Reference tables and test fixtures ARE tracked (D-17, S-23)
+!data/reference/*.csv
+!tests/**/*.csv

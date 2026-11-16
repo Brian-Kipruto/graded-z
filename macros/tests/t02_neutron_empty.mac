@@ -1,0 +1,30 @@
+# ============================================================================
+#  t02_neutron_empty.mac  —  Pass 00 anchor macro (M3)
+# ----------------------------------------------------------------------------
+#  Same as t01 with a 4.5 MeV NEUTRON pencil beam. The neutron branch of the
+#  dummy does count primaries, so this is t01's control for D-01, and feeds
+#  the D-04 re-crossing check (sum n_transmitted_total / 10000 > 1 ?).
+#  Run from build/:  ./graded-z ../macros/tests/t02_neutron_empty.mac
+# ============================================================================
+
+/run/initialize
+/random/setSeeds 1002 2002
+
+# --- geometry: effectively empty stack -------------------------------------
+/shield/clearLayers
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/setSourceDistance 30 cm
+/shield/build
+
+# --- source: neutron-only pencil beam on axis, firing +z -------------------
+/gps/particle neutron
+/gps/pos/type Point
+/gps/pos/centre 0 0 -30 cm
+/gps/direction 0 0 1
+/gps/ene/type Mono
+/gps/ene/mono 4.5 MeV
+
+# --- output + run ----------------------------------------------------------
+/analysis/setFileName t02_neutron_empty
+/run/printProgress 2000
+/run/beamOn 10000

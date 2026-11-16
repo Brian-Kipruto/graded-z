@@ -1,0 +1,30 @@
+# ============================================================================
+#  t03_source_distance.mac  —  Pass 00 anchor macro (M4)
+# ----------------------------------------------------------------------------
+#  One Am-Be event at a source distance of 10 cm, then one at 50 cm, with
+#  tracking verbose on. If /shield/setSourceDistance worked, the primary's
+#  first-step z would be -100 mm and -500 mm. D-02 predicts -300 mm both
+#  times (GPS centre hardcoded in source_ambe.mac).
+#  Run from build/ (needs build/source_ambe.mac, copied there by cmake).
+#  source_ambe.mac is executed ONCE: every execution adds another GPS source.
+# ============================================================================
+
+/run/initialize
+/random/setSeeds 1003 2003
+
+/shield/clearLayers
+/shield/addLayer G4_Galactic 0.001 mm
+
+/control/execute source_ambe.mac
+/analysis/setFileName t03_source_distance
+/tracking/verbose 1
+
+# --- run A: 10 cm -----------------------------------------------------------
+/shield/setSourceDistance 10 cm
+/shield/build
+/run/beamOn 1
+
+# --- run B: 50 cm -----------------------------------------------------------
+/shield/setSourceDistance 50 cm
+/shield/build
+/run/beamOn 1

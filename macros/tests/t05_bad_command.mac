@@ -1,0 +1,26 @@
+# ============================================================================
+#  t05_bad_command.mac  —  Pass 00 anchor macro (M10)
+# ----------------------------------------------------------------------------
+#  One DELIBERATELY misspelled command before /run/beamOn. Geant4 aborts the
+#  macro ("Batch is interrupted"), but main.cc ignores the status of
+#  ApplyCommand and returns 0. D-16 predicts: exit 0, and NO t05 CSV written.
+#  Do not "fix" the typo below. It is the test.
+#  Run from build/:  ./graded-z ../macros/tests/t05_bad_command.mac
+# ============================================================================
+
+/run/initialize
+/random/setSeeds 1005 2005
+
+/shield/clearLayers
+/shield/addLayer G4_Galactic 0.001 mm
+/shield/build
+
+/gps/particle gamma
+/gps/pos/type Point
+/gps/pos/centre 0 0 -30 cm
+/gps/directoin 0 0 1
+/gps/ene/type Mono
+/gps/ene/mono 4.4 MeV
+
+/analysis/setFileName t05_bad_command
+/run/beamOn 100

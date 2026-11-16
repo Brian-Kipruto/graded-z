@@ -23,7 +23,7 @@ graded-z/
 │   ├── run_phase1.py           # ONE command: sample → sweep → aggregate
 │   ├── orchestrator/           # sampling, macros, runner, aggregation
 │   └── ml/                     # Phase III feature + model stubs
-└── docs/adr/                   # architecture decision records
+└── docs/                       # frozen record: decisions/ features/ validation/ troubleshooting/ (see docs/INDEX.md)
 ```
 
 ## The C++ classes (read order for rewriting by hand)
@@ -88,3 +88,12 @@ secondary yields) in `aggregate.py` — never in C++.
 - Pass `true` for overlap checking in every `G4PVPlacement` during dev.
 - Keep unit math explicit: `value / MeV`, `flux * cm2` (NOT `/(1.0/cm2)`).
 - After adding a new source file, re-run `cmake ..` before `make`.
+
+## Status, repository and licence
+
+- **Status:** under rewrite-in-place. The original scaffold is frozen at tag `v0-dummy`;
+  each pass retypes the files it touches and fixes their measured defects.
+- **Canonical repository:** `github.com/Brian-Kipruto/graded-z`. The older
+  `graded-z-shielding` repository is archived and superseded by this one.
+- **Licence:** code under the MIT licence (see `LICENSE`). The dataset will be released
+  under CC-BY-4.0.
